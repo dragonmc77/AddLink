@@ -1,0 +1,12 @@
+Name: Add Link
+Author: Playnite
+Version: 1.0
+Module: AddLink.ps1
+Type: Script
+Functions: 
+    - Description: Add Link MetaCritic
+      FunctionName: AddLinkMetaCritic
+    - Description: Add Link IGDB
+      FunctionName: AddLinkIGDB
+    - Description: Fix Link
+      FunctionName: FixLink
