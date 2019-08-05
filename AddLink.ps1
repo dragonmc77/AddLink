@@ -52,6 +52,11 @@
         # add the link to the game
         if ($gameUrl.Length -gt 0) {
             $link = [Playnite.SDK.Models.Link]::New("MetaCritic",$gameUrl)
+            # if the game has never had any links, a new Links collection will have to be initialized and assigned to the Links property
+            if (-not $game.Links) {
+                $Links = New-Object System.Collections.ObjectModel.ObservableCollection[Playnite.SDK.Models.Link]
+                $game.Links = $Links
+            }
             $game.Links.Add($link)
             $PlayniteApi.Database.Games.Update($game)
             Add-Content -Path "$logPath\debug.log" -Value "link added: $gameUrl"
@@ -116,6 +121,11 @@ function global:AddLinkIGDB()
         # add the link to the game
         if ($gameUrl.Length -gt 0) {
             $link = [Playnite.SDK.Models.Link]::New("IGDB",$gameUrl)
+            # if the game has never had any links, a new Links collection will have to be initialized and assigned to the Links property
+            if (-not $game.Links) {
+                $Links = New-Object System.Collections.ObjectModel.ObservableCollection[Playnite.SDK.Models.Link]
+                $game.Links = $Links
+            }
             $game.Links.Add($link)
             $PlayniteApi.Database.Games.Update($game)
             Add-Content -Path "$logPath\debug.log" -Value "link added: $gameUrl"
