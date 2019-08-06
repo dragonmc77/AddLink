@@ -41,12 +41,11 @@
         $response = $PlayniteApi.Dialogs.SelectString("Is this the correct page for this game?","$($game.Name)","$gameUrl")
 
         # set the final game url based on the response
-        if ($response.Result -and $response.SelectedString.Length -eq 0) {
-            $gameUrl = $response.SelectedString
-            Add-Content -Path "$logPath\debug.log" -Value "gameUrl Prompt: (empty)"
-        } elseif (-not $response.Result) {
+        if (-not $response.Result) {
             $gameUrl = ""
             Add-Content -Path "$logPath\debug.log" -Value "gameUrl Prompt: (cancel)"
+        } else {
+            $gameUrl = $response.SelectedString
         }
 
         # add the link to the game
@@ -110,12 +109,11 @@ function global:AddLinkIGDB()
         $response = $PlayniteApi.Dialogs.SelectString("Is this the correct page for this game?","$($game.Name)","$gameUrl")
 
         # set the final game url based on the response
-        if ($response.Result -and $response.SelectedString.Length -eq 0) {
-            $gameUrl = $response.SelectedString
-            Add-Content -Path "$logPath\debug.log" -Value "gameUrl Prompt: (empty)"
-        } elseif (-not $response.Result) {
+        if (-not $response.Result) {
             $gameUrl = ""
             Add-Content -Path "$logPath\debug.log" -Value "gameUrl Prompt: (cancel)"
+        } else {
+            $gameUrl = $response.SelectedString
         }
 
         # add the link to the game
