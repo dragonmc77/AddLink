@@ -8,7 +8,12 @@
     #>
     $logPath = "$env:appdata\Playnite\Extensions\AddLink"
     if (-not (Test-Path $logPath)) {$logPath = [IO.Path]::GetTempPath()}
-
+    <#  the minimum time in milliseconds between processing each game
+        this avoids 429 errors, as both IGDB and MetaCritic have rate limiting and velocity checks
+        after some rudimentary testing, an interval of 5 seconds was deemed adequate
+    #>
+    $interval = 5000
+    
     # retrieve the currently selected games
     $selection = $PlayniteApi.MainView.SelectedGames
 
@@ -36,6 +41,7 @@
             in this case, the user can copy the correct link to the game from the search page and paste it in the dialog box #>
         Start-Process ($searchUrl -f $game.Name)
         Start-Process $gameUrl
+        $timer = [System.Diagnostics.Stopwatch]::StartNew()
 
         # ask if this is the correct url
         $response = $PlayniteApi.Dialogs.SelectString("Is this the correct page for this game?","$($game.Name)","$gameUrl")
@@ -60,7 +66,8 @@
             $PlayniteApi.Database.Games.Update($game)
             Add-Content -Path "$logPath\debug.log" -Value "link added: $gameUrl"
         }
-        Start-Sleep -Seconds 5
+        $timer.Stop()
+        if ($timer.Elapsed.Milliseconds -lt $interval) {Start-Sleep -Milliseconds ($interval - $timer.Elapsed.Milliseconds) }
     }
 }
 function global:AddLinkIGDB()
@@ -73,6 +80,11 @@ function global:AddLinkIGDB()
     #>
     $logPath = "$env:appdata\Playnite\Extensions\AddLink"
     if (-not (Test-Path $logPath)) {$logPath = [IO.Path]::GetTempPath()}
+    <#  the minimum time in milliseconds between processing each game
+        this avoids 429 errors, as both IGDB and MetaCritic have rate limiting and velocity checks
+        after some rudimentary testing, an interval of 5 seconds was deemed adequate
+    #>
+    $interval = 5000
 
     # retrieve the currently selected games
     $selection = $PlayniteApi.MainView.SelectedGames
@@ -104,6 +116,7 @@ function global:AddLinkIGDB()
         #>
         Start-Process ($searchUrl -f $game.Name)
         Start-Process $gameUrl
+        $timer = [System.Diagnostics.Stopwatch]::StartNew()
 
         # ask if this is the correct url
         $response = $PlayniteApi.Dialogs.SelectString("Is this the correct page for this game?","$($game.Name)","$gameUrl")
@@ -128,7 +141,8 @@ function global:AddLinkIGDB()
             $PlayniteApi.Database.Games.Update($game)
             Add-Content -Path "$logPath\debug.log" -Value "link added: $gameUrl"
         }
-        Start-Sleep -Seconds 5
+        $timer.Stop()
+        if ($timer.Elapsed.Milliseconds -lt $interval) {Start-Sleep -Milliseconds ($interval - $timer.Elapsed.Milliseconds) }
     }
 }
 function global:FixLink()
