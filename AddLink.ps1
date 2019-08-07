@@ -149,10 +149,23 @@ function global:FixLink()
 {
     # retrieve the currently selected games
     $selection = $PlayniteApi.MainView.SelectedGames
+    $logPath = "$env:appdata\Playnite\Extensions\AddLink"
 
     foreach ($game in $selection) {
-        $link = $game.Links | Where-Object {$_.Url.StartsWith("https://www.igdb")}
-        if ($link -ne $null) {$link.Name = "IGDB"}
-        $PlayniteApi.Database.Games.Update($game)
+        Add-Content -Path "$logPath\debug.log" -Value "Game: $($game.Name)"
+        $link = $game.Links | Where-Object {$_.Name -eq "MetaCritic"}
+        if ($link -ne $null) {
+            try {
+                Invoke-WebRequest -Uri $link.Url
+            } catch {
+                Add-Content -Path "$logPath\debug.log" -Value "Fixing Game: $($game.Name)"
+                try {
+                    $game.Links.Remove($link)
+                    $game.Version = "FixMetaCritic"
+                    $PlayniteApi.Database.Games.Update($game)
+                } catch {Add-Content -Path "$logPath\debug.log" -Value "Error removing link: $($game.Name)"}
+            }
+        }
+        Start-Sleep -Seconds 5
     }
 }
