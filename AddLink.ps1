@@ -154,7 +154,7 @@ function global:FixLinkMetaCritic()
     foreach ($game in $selection) {
         Add-Content -Path "$logPath\debug.log" -Value "Game: $($game.Name)"
         $link = $game.Links | Where-Object {$_.Name -eq "MetaCritic"}
-        if ($link -ne $null) {
+        if ($link) {
             try {
                 Invoke-WebRequest -Uri $link.Url
             } catch {
@@ -178,7 +178,7 @@ function global:FixLinkIGDB()
     foreach ($game in $selection) {
         Add-Content -Path "$logPath\debug.log" -Value "Game: $($game.Name)"
         $link = $game.Links | Where-Object {$_.Name -eq "IGDB"}
-        if ($link -ne $null) {
+        if ($link) {
             try {
                 Invoke-WebRequest -Uri $link.Url
             } catch {
