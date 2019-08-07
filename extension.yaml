@@ -8,5 +8,5 @@ Functions:
       FunctionName: AddLinkMetaCritic
     - Description: Add Link IGDB
       FunctionName: AddLinkIGDB
-    - Description: Fix Link
-      FunctionName: FixLink
+    - Description: Fix IGDB
+      FunctionName: FixLinkIGDB

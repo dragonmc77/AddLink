@@ -145,7 +145,7 @@ function global:AddLinkIGDB()
         if ($timer.Elapsed.Milliseconds -lt $interval) {Start-Sleep -Milliseconds ($interval - $timer.Elapsed.Milliseconds) }
     }
 }
-function global:FixLink()
+function global:FixLinkMetaCritic()
 {
     # retrieve the currently selected games
     $selection = $PlayniteApi.MainView.SelectedGames
@@ -162,6 +162,30 @@ function global:FixLink()
                 try {
                     $game.Links.Remove($link)
                     $game.Version = "FixMetaCritic"
+                    $PlayniteApi.Database.Games.Update($game)
+                } catch {Add-Content -Path "$logPath\debug.log" -Value "Error removing link: $($game.Name)"}
+            }
+        }
+        Start-Sleep -Seconds 5
+    }
+}
+function global:FixLinkIGDB()
+{
+    # retrieve the currently selected games
+    $selection = $PlayniteApi.MainView.SelectedGames
+    $logPath = "$env:appdata\Playnite\Extensions\AddLink"
+
+    foreach ($game in $selection) {
+        Add-Content -Path "$logPath\debug.log" -Value "Game: $($game.Name)"
+        $link = $game.Links | Where-Object {$_.Name -eq "IGDB"}
+        if ($link -ne $null) {
+            try {
+                Invoke-WebRequest -Uri $link.Url
+            } catch {
+                Add-Content -Path "$logPath\debug.log" -Value "Fixing Game: $($game.Name)"
+                try {
+                    $game.Links.Remove($link)
+                    $game.Version = "FixIGDB"
                     $PlayniteApi.Database.Games.Update($game)
                 } catch {Add-Content -Path "$logPath\debug.log" -Value "Error removing link: $($game.Name)"}
             }
