@@ -8,5 +8,7 @@ Functions:
       FunctionName: AddLinkMetaCritic
     - Description: Add Link IGDB
       FunctionName: AddLinkIGDB
+    - Description: Add Link GamesDatabase
+      FunctionName: AddLinkGamesDatabase
     - Description: Fix IGDB
       FunctionName: FixLinkIGDB
