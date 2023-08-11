@@ -1,7 +1,8 @@
+﻿Id: AddLink_686a0527-2588-411a-8c3c-920df033467f
 Name: Add Link
-Author: dragonmc
+Author: Mike C (dragonmc)
 Version: 1.0
-Module: AddLink.ps1
+Module: AddLink.psm1
 Type: Script
 Functions: 
     - Description: Add Link MetaCritic

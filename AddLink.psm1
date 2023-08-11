@@ -1,4 +1,55 @@
-﻿function global:AddLinkMetaCritic()
+function OnApplicationStarted()
+{
+    $__logger.Info("OnApplicationStarted")
+}
+
+function OnApplicationStopped()
+{
+    $__logger.Info("OnApplicationStopped")
+}
+
+function OnLibraryUpdated()
+{
+    $__logger.Info("OnLibraryUpdated")
+}
+
+function OnGameStarting()
+{
+    param($evnArgs)
+    $__logger.Info("OnGameStarting $($evnArgs.Game)")
+}
+
+function OnGameStarted()
+{
+    param($evnArgs)
+    $__logger.Info("OnGameStarted $($evnArgs.Game)")
+}
+
+function OnGameStopped()
+{
+    param($evnArgs)
+    $__logger.Info("OnGameStopped $($evnArgs.Game) $($evnArgs.ElapsedSeconds)")
+}
+
+function OnGameInstalled()
+{
+    param($evnArgs)
+    $__logger.Info("OnGameInstalled $($evnArgs.Game)")
+}
+
+function OnGameUninstalled()
+{
+    param($evnArgs)
+    $__logger.Info("OnGameUninstalled $($evnArgs.Game)")
+}
+
+function OnGameSelected()
+{
+    param($gameSelectionEventArgs)
+    $__logger.Info("OnGameSelected $($gameSelectionEventArgs.OldValue) -> $($gameSelectionEventArgs.NewValue)")
+}
+
+function AddLinkMetaCritic()
 {
     $searchUrl = "https://www.metacritic.com/search/game/{0}/results?plats[3]=1&search_type=advanced"
     $gameUrlTemplate = "https://www.metacritic.com/game/pc/{0}"
@@ -72,8 +123,12 @@
         if ($timeElapsed -lt $interval) {Start-Sleep -Milliseconds ($interval - $timeElapsed)}
     }
 }
-function global:AddLinkIGDB()
+function AddLinkIGDB()
 {
+    param(
+        $scriptMainMenuItemActionArgs
+    )
+
     $searchUrl = "https://www.igdb.com/search?utf8=%E2%9C%93&type=1&q={0}"
     $gameUrlTemplate = "https://www.igdb.com/games/{0}"
     <#  logPath is used for logging to a text file for debug purposes. if Playnite is running in Install mode, this path
@@ -98,7 +153,8 @@ function global:AddLinkIGDB()
             this works best if the game name on Playnite is as close as possible to the official name of the game
         #>
         $urlFriendlyName = $game.Name.ToLower().Replace(" ","-").Replace("/","slash")
-        $urlFriendlyName = [regex]::Replace($urlFriendlyName,"[:\.'&,!]","")
+        $urlFriendlyName = $urlFriendlyName.Replace("&","and").Replace("'","-")
+        $urlFriendlyName = [regex]::Replace($urlFriendlyName,"[:\.,!]","")
         $urlFriendlyName = [regex]::Replace($urlFriendlyName,"-{2,}","-")
         Add-Content -Path "$logPath\debug.log" -Value "urlFriendlyName: $urlFriendlyName"
         $gameUrl = $gameUrlTemplate -f $urlFriendlyName
@@ -147,7 +203,7 @@ function global:AddLinkIGDB()
         if ($timeElapsed -lt $interval) {Start-Sleep -Milliseconds ($interval - $timeElapsed)}
     }
 }
-function global:FixLinkMetaCritic()
+function FixLinkMetaCritic()
 {
     # retrieve the currently selected games
     $selection = $PlayniteApi.MainView.SelectedGames
@@ -171,7 +227,7 @@ function global:FixLinkMetaCritic()
         Start-Sleep -Seconds 5
     }
 }
-function global:FixLinkIGDB()
+function FixLinkIGDB()
 {
     # retrieve the currently selected games
     $selection = $PlayniteApi.MainView.SelectedGames
@@ -195,7 +251,7 @@ function global:FixLinkIGDB()
         Start-Sleep -Seconds 5
     }
 }
-function global:AddLinkGamesDatabase()
+function AddLinkGamesDatabase()
 {
     $searchUrl = "https://www.gamesdatabase.org/list.aspx?in=1&searchtext={0}&searchtype=1"
     $gameUrlTemplate = "https://www.gamesdatabase.org/game/valve-steam/{0}"
@@ -269,4 +325,17 @@ function global:AddLinkGamesDatabase()
         $timeElapsed = ((Get-Date) - $startTime).TotalMilliseconds
         if ($timeElapsed -lt $interval) {Start-Sleep -Milliseconds ($interval - $timeElapsed)}
     }
+}
+
+function GetMainMenuItems()
+{
+    param(
+        $getMainMenuItemsArgs
+    )
+
+    $menuItem = New-Object Playnite.SDK.Plugins.ScriptMainMenuItem
+    $menuItem.Description = "Add IGDB link"
+    $menuItem.FunctionName = "AddLinkIGDB"
+    $menuItem.MenuSection = "@"
+	return $menuItem
 }
