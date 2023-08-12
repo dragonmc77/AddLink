@@ -154,7 +154,7 @@ function AddLinkIGDB() {
             this is a best guess based on the url structure used for games on the site
             this works best if the game name on Playnite is as close as possible to the official name of the game
         #>
-        $urlFriendlyName = $game.Name.ToLower().Replace(" ","-").Replace("/","slash")
+        $urlFriendlyName = $game.Name.ToLower().Replace(" ","-").Replace("/","-slash-")
         $urlFriendlyName = $urlFriendlyName.Replace("&","and").Replace("'","-")
         $urlFriendlyName = [regex]::Replace($urlFriendlyName,"[:\.,!]","")
         $urlFriendlyName = [regex]::Replace($urlFriendlyName,"-{2,}","-")
