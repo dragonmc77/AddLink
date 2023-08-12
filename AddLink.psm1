@@ -348,3 +348,20 @@ function GetMainMenuItems()
     $menuItems += $menuItem
 	return $menuItems
 }
+
+function GetGameMenuItems()
+{
+    param(
+        $getGameMenuItemsArgs
+    )
+    $menuItems = @()
+    $menuItem = New-Object Playnite.SDK.Plugins.ScriptGameMenuItem
+    $menuItem.Description = "Add IGDB link"
+    $menuItem.FunctionName = "AddLinkIGDB"
+    $menuItems += $menuItem
+    $menuItem = New-Object Playnite.SDK.Plugins.ScriptGameMenuItem
+    $menuItem.Description = "Add MetaCritic link"
+    $menuItem.FunctionName = "AddLinkMetaCritic"
+    $menuItems += $menuItem
+	return $menuItems
+}
