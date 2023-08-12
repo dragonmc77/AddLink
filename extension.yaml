@@ -4,12 +4,3 @@ Author: Mike C (dragonmc)
 Version: 1.0
 Module: AddLink.psm1
 Type: Script
-Functions: 
-    - Description: Add Link MetaCritic
-      FunctionName: AddLinkMetaCritic
-    - Description: Add Link IGDB
-      FunctionName: AddLinkIGDB
-    - Description: Add Link GamesDatabase
-      FunctionName: AddLinkGamesDatabase
-    - Description: Fix IGDB
-      FunctionName: FixLinkIGDB

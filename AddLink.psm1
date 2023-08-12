@@ -49,8 +49,11 @@ function OnGameSelected()
     $__logger.Info("OnGameSelected $($gameSelectionEventArgs.OldValue) -> $($gameSelectionEventArgs.NewValue)")
 }
 
-function AddLinkMetaCritic()
-{
+function AddLinkMetaCritic() {
+    param (
+        $scriptMainMenuItemActionArgs
+    )
+
     $searchUrl = "https://www.metacritic.com/search/game/{0}/results?plats[3]=1&search_type=advanced"
     $gameUrlTemplate = "https://www.metacritic.com/game/pc/{0}"
     
@@ -123,9 +126,8 @@ function AddLinkMetaCritic()
         if ($timeElapsed -lt $interval) {Start-Sleep -Milliseconds ($interval - $timeElapsed)}
     }
 }
-function AddLinkIGDB()
-{
-    param(
+function AddLinkIGDB() {
+    param (
         $scriptMainMenuItemActionArgs
     )
 
@@ -203,8 +205,7 @@ function AddLinkIGDB()
         if ($timeElapsed -lt $interval) {Start-Sleep -Milliseconds ($interval - $timeElapsed)}
     }
 }
-function FixLinkMetaCritic()
-{
+function FixLinkMetaCritic() {
     # retrieve the currently selected games
     $selection = $PlayniteApi.MainView.SelectedGames
     $logPath = "$env:appdata\Playnite\Extensions\AddLink"
@@ -227,8 +228,7 @@ function FixLinkMetaCritic()
         Start-Sleep -Seconds 5
     }
 }
-function FixLinkIGDB()
-{
+function FixLinkIGDB() {
     # retrieve the currently selected games
     $selection = $PlayniteApi.MainView.SelectedGames
     $logPath = "$env:appdata\Playnite\Extensions\AddLink"
@@ -251,8 +251,11 @@ function FixLinkIGDB()
         Start-Sleep -Seconds 5
     }
 }
-function AddLinkGamesDatabase()
-{
+function AddLinkGamesDatabase() {
+    param (
+        $scriptMainMenuItemActionArgs
+    )
+
     $searchUrl = "https://www.gamesdatabase.org/list.aspx?in=1&searchtext={0}&searchtype=1"
     $gameUrlTemplate = "https://www.gamesdatabase.org/game/valve-steam/{0}"
     <#  logPath is used for logging to a text file for debug purposes. if Playnite is running in Install mode, this path
@@ -332,10 +335,16 @@ function GetMainMenuItems()
     param(
         $getMainMenuItemsArgs
     )
-
+    $menuItems = @()
     $menuItem = New-Object Playnite.SDK.Plugins.ScriptMainMenuItem
     $menuItem.Description = "Add IGDB link"
     $menuItem.FunctionName = "AddLinkIGDB"
     $menuItem.MenuSection = "@"
-	return $menuItem
+    $menuItems += $menuItem
+    $menuItem = New-Object Playnite.SDK.Plugins.ScriptMainMenuItem
+    $menuItem.Description = "Add MetaCritic link"
+    $menuItem.FunctionName = "AddLinkMetaCritic"
+    $menuItem.MenuSection = "@"
+    $menuItems += $menuItem
+	return $menuItems
 }
