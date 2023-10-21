@@ -1,50 +1,41 @@
-function OnApplicationStarted()
-{
+function OnApplicationStarted() {
     $__logger.Info("OnApplicationStarted")
 }
 
-function OnApplicationStopped()
-{
+function OnApplicationStopped() {
     $__logger.Info("OnApplicationStopped")
 }
 
-function OnLibraryUpdated()
-{
+function OnLibraryUpdated() {
     $__logger.Info("OnLibraryUpdated")
 }
 
-function OnGameStarting()
-{
+function OnGameStarting() {
     param($evnArgs)
     $__logger.Info("OnGameStarting $($evnArgs.Game)")
 }
 
-function OnGameStarted()
-{
+function OnGameStarted() {
     param($evnArgs)
     $__logger.Info("OnGameStarted $($evnArgs.Game)")
 }
 
-function OnGameStopped()
-{
+function OnGameStopped() {
     param($evnArgs)
     $__logger.Info("OnGameStopped $($evnArgs.Game) $($evnArgs.ElapsedSeconds)")
 }
 
-function OnGameInstalled()
-{
+function OnGameInstalled() {
     param($evnArgs)
     $__logger.Info("OnGameInstalled $($evnArgs.Game)")
 }
 
-function OnGameUninstalled()
-{
+function OnGameUninstalled() {
     param($evnArgs)
     $__logger.Info("OnGameUninstalled $($evnArgs.Game)")
 }
 
-function OnGameSelected()
-{
+function OnGameSelected() {
     param($gameSelectionEventArgs)
     $__logger.Info("OnGameSelected $($gameSelectionEventArgs.OldValue) -> $($gameSelectionEventArgs.NewValue)")
 }
@@ -54,7 +45,7 @@ function AddLinkMetaCritic() {
         $scriptMainMenuItemActionArgs
     )
 
-    $searchUrl = "https://www.metacritic.com/search/game/{0}/results?plats[3]=1&search_type=advanced"
+    $searchUrl = "https://www.metacritic.com/search/{0}/?category=13&page=1"
     $gameUrlTemplate = "https://www.metacritic.com/game/pc/{0}"
     
     <#  logPath is used for logging to a text file for debug purposes. if Playnite is running in Install mode, this path
@@ -126,6 +117,7 @@ function AddLinkMetaCritic() {
         if ($timeElapsed -lt $interval) {Start-Sleep -Milliseconds ($interval - $timeElapsed)}
     }
 }
+
 function AddLinkIGDB() {
     param (
         $scriptMainMenuItemActionArgs
@@ -205,6 +197,7 @@ function AddLinkIGDB() {
         if ($timeElapsed -lt $interval) {Start-Sleep -Milliseconds ($interval - $timeElapsed)}
     }
 }
+
 function FixLinkMetaCritic() {
     # retrieve the currently selected games
     $selection = $PlayniteApi.MainView.SelectedGames
@@ -228,6 +221,7 @@ function FixLinkMetaCritic() {
         Start-Sleep -Seconds 5
     }
 }
+
 function FixLinkIGDB() {
     # retrieve the currently selected games
     $selection = $PlayniteApi.MainView.SelectedGames
@@ -251,6 +245,7 @@ function FixLinkIGDB() {
         Start-Sleep -Seconds 5
     }
 }
+
 function AddLinkGamesDatabase() {
     param (
         $scriptMainMenuItemActionArgs
