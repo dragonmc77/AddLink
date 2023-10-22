@@ -2,6 +2,7 @@
 AddLink Extension for Playnite
 
 To install:
+
 Download the .pext from releases and run it.
 
 To use, select one or multiple games and run the appropriate command from the Extensions menu.
